@@ -39,3 +39,14 @@ class HalamanUtama extends BaseController
         return redirect()->back()->with('success','Perubahan berhasil disimpan.');
     }
 }
+
+<div class="p-6">
+  <h1 class="text-2xl font-semibold">Halaman Utama (Admin)</h1>
+  <p class="mt-2 text-gray-600">Gunakan controller App\Controllers\Admin\HalamanUtama untuk logika. File ini hanya view.</p>
+
+  <?php if (!empty($data)): ?>
+    <div class="mt-4 bg-white p-4 rounded shadow">
+      <pre class="text-sm"><?= esc(print_r($data, true)) ?></pre>
+    </div>
+  <?php endif; ?>
+</div>

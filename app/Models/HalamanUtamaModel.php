@@ -1,50 +1,47 @@
 <?php
+
 namespace App\Models;
 
-use CodeIgniter\Model;
-
-class HalamanUtamaModel extends Model
+class HalamanUtamaModel
 {
     protected $filePath;
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->filePath = WRITEPATH . 'halaman_utama.json';
-
+        
+        // Buat file default jika belum ada
         if (!file_exists($this->filePath)) {
-            $this->buatFileDefault();
+            $this->createDefaultFile();
         }
     }
 
-    private function buatFileDefault()
+    public function getData()
     {
-        $this->simpan([
-            'judul'       => 'Selamat Datang di PUSMENDIK',
-            'deskripsi'   => 'Pusat Informasi Asesmen',
-            'teks_tombol' => 'Lihat Jadwal',
-            'link_tombol' => base_url('jadwal'),
-            'banner'      => '',
-            'diubah_pada' => date('Y-m-d H:i:s')
-        ]);
-    }
-
-    public function ambilData()
-    {
-        if (!file_exists($this->filePath)) {
-            return [];
-        }
-
         $json = file_get_contents($this->filePath);
-        return json_decode($json, true) ?: [];
+        return json_decode($json, true);
     }
 
-    public function simpan(array $data)
+    public function saveData($data)
     {
-        return file_put_contents(
-            $this->filePath,
-            json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-        );
+        $json = json_encode($data, JSON_PRETTY_PRINT);
+        return file_put_contents($this->filePath, $json);
+    }
+
+    protected function createDefaultFile()
+    {
+        $defaultData = [
+            'hero_title' => 'PUSMENDIK – Pusat Informasi Asesmen',
+            'hero_subtitle' => 'Sumber Informasi Resmi Asesmen Sekolah SMK Darut Taqwa',
+            'sambutan_ketua' => 'Selamat datang di sistem asesmen PUSMENDIK...',
+            'banner_image' => '',
+            'statistik' => [
+                'peserta' => '1200+',
+                'kompetensi' => '15',
+                'kelulusan' => '98%'
+            ]
+        ];
+        
+        $this->saveData($defaultData);
     }
 }

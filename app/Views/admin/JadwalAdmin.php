@@ -64,4 +64,11 @@ class JadwalAdmin extends BaseController
         $this->model->delete($id);
         return redirect()->to('/admin/jadwal')->with('success','Jadwal dihapus.');
     }
+
+    public function data()
+    {
+        if (!$this->cekAuth()) return redirect()->to('/admin');
+        $jadwals = $this->model->orderBy('tanggal','ASC')->findAll();
+        echo view('tata_letak/admin', ['konten'=>view('admin/jadwal_data',['jadwals'=>$jadwals])]);
+    }
 }

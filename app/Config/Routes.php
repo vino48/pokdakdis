@@ -1,17 +1,26 @@
 <?php
 
+namespace Config;
+
 use CodeIgniter\Router\RouteCollection;
 
-/**
- * @var RouteCollection $routes
- */
+// Create a new instance of our RouteCollection.
+$routes = Services::routes();
+
+// Router Setup (opsional tapi direkomendasikan)
+$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultController('Home');
+$routes->setDefaultMethod('index');
+$routes->setTranslateURIDashes(false);
+$routes->set404Override();
+$routes->setAutoRoute(false); // set true jika ingin auto-routing
 
 // Frontend
-$routes->get('/', 'Beranda::index');
+$routes->get('/', 'Home::index');
 $routes->get('jadwal', 'Jadwal::index');
 $routes->get('jadwal/(:num)', 'Jadwal::detail/$1');
 
-// Perbaikan: gunakan Beranda::helpdesk karena Anda sudah membuat method-nya
+// Jika Anda pakai controller Beranda::helpdesk
 $routes->get('helpdesk', 'Beranda::helpdesk');
 
 // Admin Auth

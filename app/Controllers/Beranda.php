@@ -1,30 +1,38 @@
 <?php
+
 namespace App\Controllers;
 
+use App\Models\JadwalModel;
 use App\Models\HalamanUtamaModel;
 
 class Beranda extends BaseController
 {
-    protected $halamanModel;
+    protected $jadwalModel;
+    protected $halamanUtamaModel;
 
     public function __construct()
     {
-        $this->halamanModel = new HalamanUtamaModel();
+        $this->jadwalModel = new JadwalModel();
+        $this->halamanUtamaModel = new HalamanUtamaModel();
     }
 
     public function index()
     {
-        $data = $this->halamanModel->ambilData();
+        // Ambil data halaman utama dari JSON
+        $halamanUtama = $this->halamanUtamaModel->getData();
+        
+        // Ambil 3 jadwal terbaru untuk ditampilkan di beranda
+        $jadwalTerbaru = $this->jadwalModel
+            ->orderBy('tanggal', 'DESC')
+            ->limit(3)
+            ->findAll();
 
-        return view('tata_letak/utama', [
-            'konten' => view('depan/beranda', ['data' => $data])
-        ]);
-    }
+        $data = [
+            'title' => 'PUSMENDIK - Beranda',
+            'halamanUtama' => $halamanUtama,
+            'jadwalTerbaru' => $jadwalTerbaru
+        ];
 
-    public function helpdesk()
-    {
-        return view('tata_letak/utama', [
-            'konten' => view('depan/helpdesk')
-        ]);
+        return view('depan/beranda', $data);
     }
 }
